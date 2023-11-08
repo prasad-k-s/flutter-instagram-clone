@@ -52,12 +52,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         backgroundColor: Colors.grey,
                       ),
                       Positioned(
-                        bottom: 0,
+                        bottom: -10,
                         right: 0,
                         child: IconButton(
                           onPressed: () {},
                           icon: const Icon(
-                            Icons.image,
+                            Icons.add_a_photo,
                             size: 30,
                           ),
                         ),
