@@ -1,8 +1,15 @@
+import 'dart:typed_data';
+
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_instagram_clone/resources/auth_methods.dart';
 import 'package:flutter_instagram_clone/utlis/colors.dart';
+import 'package:flutter_instagram_clone/utlis/custom_image_picker.dart';
+import 'package:flutter_instagram_clone/utlis/snackbar.dart';
 import 'package:flutter_instagram_clone/widgets/textfield.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:regexpattern/regexpattern.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -27,9 +34,43 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
-  void signUp() {
+  void signUp() async {
+    if (userImage == null) {
+      showSnackbar(
+          context: context,
+          text: 'Please pick an profile picture',
+          contentType: ContentType.warning,
+          title: 'Profile picture');
+      return;
+    }
     final isValid = myKey.currentState!.validate();
-    if (isValid) {}
+    if (isValid) {
+      String res = await AuthMethods().signUpUser(
+        userName: userNameController.text.trim(),
+        email: emailController.text.trim(),
+        bio: bioController.text.trim(),
+        password: passwordController.text.trim(),
+        file: userImage!,
+      );
+      if (context.mounted) {
+        showSnackbar(
+          context: context,
+          text: res,
+          contentType: res == 'Account created successfully' ? ContentType.success : ContentType.failure,
+          title: 'Profile picture',
+        );
+      }
+    }
+  }
+
+  Uint8List? userImage;
+  void pickUserImage() async {
+    Uint8List? file = await pickImage(ImageSource.gallery, context);
+    if (file != null) {
+      setState(() {
+        userImage = file;
+      });
+    }
   }
 
   @override
@@ -59,15 +100,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     Stack(
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 65,
                           backgroundColor: Colors.grey,
+                          backgroundImage: userImage != null
+                              ? Image.memory(userImage!).image
+                              : const AssetImage('assets/anonymous_avatars_grey_circles.jpg'),
                         ),
                         Positioned(
                           bottom: -10,
                           right: 0,
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: pickUserImage,
                             icon: const Icon(
                               Icons.add_a_photo,
                               size: 30,

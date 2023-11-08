@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/utlis/colors.dart';
 import 'package:flutter_instagram_clone/widgets/textfield.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:regexpattern/regexpattern.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
