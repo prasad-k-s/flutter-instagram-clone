@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -52,12 +51,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         password: passwordController.text.trim(),
         file: userImage!,
       );
+      bool status = res == 'Account created successfully';
       if (context.mounted) {
         showSnackbar(
           context: context,
           text: res,
-          contentType: res == 'Account created successfully' ? ContentType.success : ContentType.failure,
-          title: 'Profile picture',
+          contentType: status ? ContentType.success : ContentType.failure,
+          title: status ? 'Success' : 'Oh snap!',
         );
       }
     }
