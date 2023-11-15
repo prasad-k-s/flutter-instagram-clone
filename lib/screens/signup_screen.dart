@@ -3,6 +3,10 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/resources/auth_methods.dart';
+import 'package:flutter_instagram_clone/responsive_layout/mobile_screen_layout.dart';
+import 'package:flutter_instagram_clone/responsive_layout/responsive.dart';
+import 'package:flutter_instagram_clone/responsive_layout/web_screen_layout.dart';
+import 'package:flutter_instagram_clone/screens/login_screen.dart';
 import 'package:flutter_instagram_clone/utlis/colors.dart';
 import 'package:flutter_instagram_clone/utlis/custom_image_picker.dart';
 import 'package:flutter_instagram_clone/utlis/snackbar.dart';
@@ -60,6 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         isLoading = false;
       });
       bool status = (res == 'Account created successfully');
+
       if (context.mounted) {
         showSnackbar(
           context: context,
@@ -68,7 +73,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
           title: status ? 'Success' : 'Oh snap!',
         );
       }
+      if (status && context.mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) {
+              return const ResponsiveLayout(
+                mobileScreenLayout: MobileScreenLayout(),
+                webScreenLayout: WebScreenLayout(),
+              );
+            },
+          ),
+        );
+      }
     }
+  }
+
+  void navigateToLogin() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) {
+          return const LoginScreen();
+        },
+      ),
+    );
   }
 
   Uint8List? userImage;
@@ -252,7 +279,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: navigateToLogin,
                             child: const Text(
                               'Log In',
                               style: TextStyle(

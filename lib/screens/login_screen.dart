@@ -2,6 +2,10 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/resources/auth_methods.dart';
+import 'package:flutter_instagram_clone/responsive_layout/mobile_screen_layout.dart';
+import 'package:flutter_instagram_clone/responsive_layout/responsive.dart';
+import 'package:flutter_instagram_clone/responsive_layout/web_screen_layout.dart';
+import 'package:flutter_instagram_clone/screens/signup_screen.dart';
 import 'package:flutter_instagram_clone/utlis/colors.dart';
 import 'package:flutter_instagram_clone/utlis/snackbar.dart';
 import 'package:flutter_instagram_clone/widgets/textfield.dart';
@@ -50,7 +54,29 @@ class _LoginScreenState extends State<LoginScreen> {
           title: status ? 'Success' : 'Oh snap!',
         );
       }
+      if (status && context.mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) {
+              return const ResponsiveLayout(
+                mobileScreenLayout: MobileScreenLayout(),
+                webScreenLayout: WebScreenLayout(),
+              );
+            },
+          ),
+        );
+      }
     }
+  }
+
+  void navigateToSignUp() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) {
+          return const SignUpScreen();
+        },
+      ),
+    );
   }
 
   @override
@@ -142,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: navigateToSignUp,
                             child: const Text(
                               'Sign Up',
                               style: TextStyle(
