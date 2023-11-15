@@ -41,4 +41,18 @@ class AuthMethods {
       return e.toString();
     }
   }
+
+  Future<String> loginUser({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      return 'Logged in successfully';
+    } on FirebaseAuthException {
+      return 'Invalid login credentials';
+    } catch (e) {
+      return e.toString();
+    }
+  }
 }
