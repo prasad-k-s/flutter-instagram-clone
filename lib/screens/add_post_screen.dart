@@ -25,6 +25,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     super.dispose();
   }
 
+  bool isLoading = false;
   Uint8List? image;
   selectImage() {
     return showDialog(
@@ -102,6 +103,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
         );
         return;
       }
+      setState(() {
+        isLoading = true;
+      });
       String res = await FireStoreMethods().uploadPost(
         file: image!,
         description: captionController.text,
@@ -109,6 +113,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
         username: userName,
         profileImage: profileImage,
       );
+      setState(() {
+        isLoading = false;
+      });
       bool status = res == 'success';
       if (status) {
         if (context.mounted) {
@@ -118,6 +125,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
             contentType: ContentType.success,
             title: 'Post',
           );
+          clearImage();
         }
       }
     } catch (e) {
@@ -130,6 +138,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
         );
       }
     }
+  }
+
+  void clearImage() {
+    setState(() {
+      image = null;
+    });
   }
 
   @override
@@ -162,6 +176,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
           backgroundColor: mobileBackgroundColor,
           title: const Text('Post to'),
           centerTitle: true,
+          leading: IconButton(
+            onPressed: clearImage,
+            icon: const Icon(
+              Icons.arrow_back,
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -185,47 +205,57 @@ class _AddPostScreenState extends State<AddPostScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    backgroundImage: NetworkImage(user.photoUrl),
-                    radius: 35,
+              if (isLoading)
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 10,
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    child: TextField(
-                      controller: captionController,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        hintText: 'Write a caption...',
-                        border: InputBorder.none,
+                  child: LinearProgressIndicator(),
+                ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.grey,
+                      backgroundImage: NetworkImage(user.photoUrl),
+                      radius: 35,
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      child: TextField(
+                        controller: captionController,
+                        decoration: const InputDecoration(
+                          filled: true,
+                          hintText: 'Write a caption...',
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 45,
-                    height: 45,
-                    child: AspectRatio(
-                      aspectRatio: 487 / 451,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: image == null
-                                ? const AssetImage(
-                                    'assets/anonymous_avatars_grey_circles.jpg',
-                                  )
-                                : Image.memory(image!).image,
-                            fit: BoxFit.cover,
-                            alignment: FractionalOffset.topCenter,
+                    SizedBox(
+                      width: 45,
+                      height: 45,
+                      child: AspectRatio(
+                        aspectRatio: 487 / 451,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: image == null
+                                  ? const AssetImage(
+                                      'assets/anonymous_avatars_grey_circles.jpg',
+                                    )
+                                  : Image.memory(image!).image,
+                              fit: BoxFit.cover,
+                              alignment: FractionalOffset.topCenter,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )
             ],
           ),
