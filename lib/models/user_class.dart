@@ -1,4 +1,5 @@
 class UserModel {
+  final String username;
   final String email;
   final String uid;
   final String photoUrl;
@@ -7,6 +8,7 @@ class UserModel {
   final List following;
 
   UserModel({
+    required this.username,
     required this.email,
     required this.uid,
     required this.photoUrl,
@@ -17,6 +19,7 @@ class UserModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'username': username,
       'email': email,
       'uid': uid,
       'photoUrl': photoUrl,
@@ -38,6 +41,7 @@ class UserModel {
       following: List.from(
         (map['following'] as List),
       ),
+      username: map['username']as String,
     );
   }
 }
