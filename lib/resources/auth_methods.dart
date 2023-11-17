@@ -13,7 +13,7 @@ class AuthMethods {
 
     DocumentSnapshot snapshot = await _firestore.collection('users').doc(currentUser.uid).get();
 
-    return UserModel.fromMap(snapshot.data() as Map<String,dynamic>);
+    return UserModel.fromMap(snapshot.data() as Map<String, dynamic>);
   }
 
   Future<String> signUpUser({
@@ -36,7 +36,8 @@ class AuthMethods {
         photoUrl: url,
         bio: bio,
         followers: [],
-        following: [], username: userName,
+        following: [],
+        username: userName,
       );
 
       await _firestore.collection('users').doc(userCredential.user!.uid).set(
