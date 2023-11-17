@@ -8,6 +8,14 @@ class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  Future<UserModel> getUserDeatils() async {
+    User currentUser = _auth.currentUser!;
+
+    DocumentSnapshot snapshot = await _firestore.collection('users').doc(currentUser.uid).get();
+
+    return UserModel.fromMap(snapshot.data() as Map<String,dynamic>);
+  }
+
   Future<String> signUpUser({
     required String userName,
     required String email,
@@ -28,7 +36,7 @@ class AuthMethods {
         photoUrl: url,
         bio: bio,
         followers: [],
-        following: [],
+        following: [], username: userName,
       );
 
       await _firestore.collection('users').doc(userCredential.user!.uid).set(
