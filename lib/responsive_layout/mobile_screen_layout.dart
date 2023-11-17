@@ -1,13 +1,83 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_instagram_clone/utlis/colors.dart';
 
-class MobileScreenLayout extends StatelessWidget {
+class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({super.key});
 
   @override
+  State<MobileScreenLayout> createState() => _MobileScreenLayoutState();
+}
+
+class _MobileScreenLayoutState extends State<MobileScreenLayout> {
+  @override
+  void initState() {
+    pageController = PageController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
+  late PageController pageController;
+  int _page = 0;
+  void onTap(int value) {
+    setState(() {
+      _page = value;
+      pageController.jumpToPage(value);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Mobile'),
+    return Scaffold(
+      body: PageView(
+        controller: pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: const [
+          Text('home'),
+          Text('search'),
+          Text('add'),
+          Text('favorite'),
+          Text('profile'),
+        ],
+      ),
+      bottomNavigationBar: CupertinoTabBar(
+        backgroundColor: mobileBackgroundColor,
+        activeColor: primaryColor,
+        inactiveColor: secondaryColor,
+        currentIndex: _page,
+        onTap: onTap,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.search,
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.add_circle,
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.favorite,
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person,
+            ),
+          )
+        ],
       ),
     );
   }
