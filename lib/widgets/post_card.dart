@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_instagram_clone/models/post.dart';
 import 'package:flutter_instagram_clone/utlis/colors.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostCard extends StatelessWidget {
-  const PostCard({super.key});
+  final QueryDocumentSnapshot<Map<String, dynamic>> snapshot;
+  const PostCard({super.key, required this.snapshot});
   String timeUntil(DateTime date) {
     return timeago.format(
       date,
@@ -14,6 +17,7 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Post post = Post.fromMap(snapshot.data());
     return Container(
       color: mobileBackgroundColor,
       padding: const EdgeInsets.symmetric(
@@ -28,20 +32,20 @@ class PostCard extends StatelessWidget {
             ).copyWith(right: 0),
             child: Row(
               children: [
-                const CircleAvatar(
-                  backgroundImage: NetworkImage('https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg'),
+                CircleAvatar(
+                  backgroundImage: NetworkImage(post.profileImage),
                   backgroundColor: Colors.grey,
                 ),
-                const Expanded(
+                Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(left: 8),
+                    padding: const EdgeInsets.only(left: 8),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'userName',
-                          style: TextStyle(
+                          post.username,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -92,11 +96,12 @@ class PostCard extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          Container(
+            color: Colors.grey,
             height: MediaQuery.of(context).size.height * 0.35,
             width: double.infinity,
             child: Image.network(
-              'https://huggingface.co/tasks/assets/image-classification/image-classification-input.jpeg',
+              post.postUrl,
               fit: BoxFit.cover,
             ),
           ),
@@ -152,7 +157,7 @@ class PostCard extends StatelessWidget {
                         fontWeight: FontWeight.w800,
                       ),
                   child: Text(
-                    '122 Likes',
+                    "${post.likes.length} Likes",
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -160,17 +165,17 @@ class PostCard extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.only(top: 8),
                   child: RichText(
-                    text: const TextSpan(
-                      style: TextStyle(color: Colors.white),
+                    text: TextSpan(
+                      style: const TextStyle(color: Colors.white),
                       children: [
                         TextSpan(
-                          text: 'username',
-                          style: TextStyle(
+                          text: post.username,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         TextSpan(
-                          text: ' Hey kbvddb djkvdkjv vkjdvjkdv dvjkdbnvjkdnjv fkjbvfjkbnjkfnbjkfnbfjkbnkjfnbjkfnbjk',
+                          text: ' ${post.description}',
                         ),
                       ],
                     ),
@@ -193,9 +198,7 @@ class PostCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
                     timeUntil(
-                      DateTime.now().subtract(
-                        const Duration(days: 1),
-                      ),
+                      post.datePublished,
                     ),
                     style: const TextStyle(
                       fontSize: 16,

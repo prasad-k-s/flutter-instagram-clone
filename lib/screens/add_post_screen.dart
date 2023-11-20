@@ -143,6 +143,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   void clearImage() {
     setState(() {
       image = null;
+      captionController.clear();
     });
   }
 
