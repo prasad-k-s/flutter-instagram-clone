@@ -1,12 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/models/post.dart';
+import 'package:flutter_instagram_clone/models/user_class.dart';
+import 'package:flutter_instagram_clone/providers/user_provider.dart';
 import 'package:flutter_instagram_clone/utlis/colors.dart';
+import 'package:flutter_instagram_clone/widgets/like_animation.dart';
+import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class PostCard extends StatelessWidget {
+class PostCard extends StatefulWidget {
   final QueryDocumentSnapshot<Map<String, dynamic>> snapshot;
   const PostCard({super.key, required this.snapshot});
+
+  @override
+  State<PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
   String timeUntil(DateTime date) {
     return timeago.format(
       date,
@@ -15,9 +25,11 @@ class PostCard extends StatelessWidget {
     );
   }
 
+  bool isLikeAnimating = false;
   @override
   Widget build(BuildContext context) {
-    Post post = Post.fromMap(snapshot.data());
+    Post post = Post.fromMap(widget.snapshot.data());
+    UserModel user = Provider.of<UserProvider>(context).getUser!;
     return Container(
       color: mobileBackgroundColor,
       padding: const EdgeInsets.symmetric(
@@ -96,21 +108,57 @@ class PostCard extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            color: Colors.grey,
-            height: MediaQuery.of(context).size.height * 0.35,
-            width: double.infinity,
-            child: Image.network(
-              post.postUrl,
-              fit: BoxFit.cover,
+          GestureDetector(
+            onDoubleTap: () {
+              setState(() {
+                isLikeAnimating = true;
+              });
+            },
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  color: Colors.grey,
+                  height: MediaQuery.of(context).size.height * 0.35,
+                  width: double.infinity,
+                  child: Image.network(
+                    post.postUrl,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 200),
+                  opacity: isLikeAnimating ? 1 : 0,
+                  child: LikeAnimation(
+                    isAnimating: isLikeAnimating,
+                    duration: const Duration(
+                      milliseconds: 400,
+                    ),
+                    onEnd: () {
+                      setState(() {
+                        isLikeAnimating = false;
+                      });
+                    },
+                    child: const Icon(
+                      Icons.favorite,
+                      color: Colors.white,
+                      size: 120,
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
           Row(
             children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.favorite,
+              LikeAnimation(
+                isAnimating: post.likes.contains(user.uid),
+                smallLike: true,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.favorite,
+                  ),
                 ),
               ),
               IconButton(
