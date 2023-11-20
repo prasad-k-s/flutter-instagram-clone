@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/models/post.dart';
 import 'package:flutter_instagram_clone/models/user_class.dart';
 import 'package:flutter_instagram_clone/providers/user_provider.dart';
+import 'package:flutter_instagram_clone/resources/firestore_methods.dart';
+import 'package:flutter_instagram_clone/screens/comment_screen.dart';
 import 'package:flutter_instagram_clone/utlis/colors.dart';
 import 'package:flutter_instagram_clone/widgets/like_animation.dart';
 import 'package:provider/provider.dart';
@@ -109,7 +111,12 @@ class _PostCardState extends State<PostCard> {
             ),
           ),
           GestureDetector(
-            onDoubleTap: () {
+            onDoubleTap: () async {
+              await FireStoreMethods().likePost(
+                post.postId,
+                user.uid,
+                post.likes,
+              );
               setState(() {
                 isLikeAnimating = true;
               });
@@ -139,9 +146,9 @@ class _PostCardState extends State<PostCard> {
                         isLikeAnimating = false;
                       });
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.favorite,
-                      color: Colors.white,
+                      color: post.likes.contains(user.uid) ? Colors.red : Colors.white,
                       size: 120,
                     ),
                   ),
@@ -155,14 +162,27 @@ class _PostCardState extends State<PostCard> {
                 isAnimating: post.likes.contains(user.uid),
                 smallLike: true,
                 child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.favorite,
+                  onPressed: () async {
+                    await FireStoreMethods().likePost(
+                      post.postId,
+                      user.uid,
+                      post.likes,
+                    );
+                  },
+                  icon: Icon(
+                    post.likes.contains(user.uid) ? Icons.favorite : Icons.favorite_border,
+                    color: post.likes.contains(user.uid) ? Colors.red : Colors.white,
                   ),
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const CommenstScreen();
+                    },
+                  ),
+                ),
                 icon: const Icon(
                   Icons.comment_outlined,
                 ),
@@ -230,7 +250,13 @@ class _PostCardState extends State<PostCard> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const CommenstScreen();
+                      },
+                    ),
+                  ),
                   child: Container(
                     padding: const EdgeInsets.only(top: 6),
                     child: const Text(
