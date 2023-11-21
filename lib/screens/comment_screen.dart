@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/models/user_class.dart';
 import 'package:flutter_instagram_clone/providers/user_provider.dart';
@@ -9,7 +10,10 @@ import 'package:flutter_instagram_clone/widgets/comment_card.dart';
 import 'package:provider/provider.dart';
 
 class CommenstScreen extends StatefulWidget {
-  const CommenstScreen({super.key, required this.postID});
+  const CommenstScreen({
+    super.key,
+    required this.postID,
+  });
   final String postID;
   @override
   State<CommenstScreen> createState() => _CommenstScreenState();
@@ -48,8 +52,35 @@ class _CommenstScreenState extends State<CommenstScreen> {
         backgroundColor: mobileBackgroundColor,
         title: const Text('Comments'),
       ),
-      body: const SafeArea(
-        child: CommentCard(),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('posts')
+            .doc(widget.postID)
+            .collection('comments')
+            .orderBy('datePublished', descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                snapshot.error.toString(),
+              ),
+            );
+          }
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              return CommentCard(
+                snapshot: snapshot.data!.docs[index],
+              );
+            },
+          );
+        },
       ),
       bottomNavigationBar: SafeArea(
         child: Container(

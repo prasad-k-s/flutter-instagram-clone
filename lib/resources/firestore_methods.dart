@@ -69,22 +69,24 @@ class FireStoreMethods {
   }) async {
     try {
       String commentID = const Uuid().v1();
-      await _firestore.collection('posts').doc(postID).collection('comments').doc(commentID).set({
-        'profilePic': profilePic,
-        'name': name,
-        'uid': uid,
-        'text': text,
-        'commentId': commentID,
-        'datePublished': DateTime.now(),
-      });
-      if (context.mounted) {
-        showSnackbar(
-          context: context,
-          text: 'Comment posted successfully',
-          contentType: ContentType.success,
-          title: "Commented",
-        );
-      }
+      await _firestore.collection('posts').doc(postID).collection('comments').doc(commentID).set(
+        {
+          'profilePic': profilePic,
+          'name': name,
+          'uid': uid,
+          'text': text,
+          'commentId': commentID,
+          'datePublished': DateTime.now().millisecondsSinceEpoch,
+        },
+      );
+      // if (context.mounted) {
+      //   showSnackbar(
+      //     context: context,
+      //     text: 'Comment posted successfully',
+      //     contentType: ContentType.success,
+      //     title: "Commented",
+      //   );
+      // }
       return true;
     } catch (e) {
       if (context.mounted) {

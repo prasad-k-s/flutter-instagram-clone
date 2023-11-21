@@ -1,13 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class CommentCard extends StatefulWidget {
-  const CommentCard({super.key});
-
+  const CommentCard({super.key, required this.snapshot});
+  final QueryDocumentSnapshot<Map<String, dynamic>> snapshot;
   @override
   State<CommentCard> createState() => _CommentCardState();
 }
 
 class _CommentCardState extends State<CommentCard> {
+  String timeUntil(DateTime date) {
+    return timeago.format(
+      date,
+      locale: 'en',
+      allowFromNow: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,8 +25,11 @@ class _CommentCardState extends State<CommentCard> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             backgroundColor: Colors.grey,
+            backgroundImage: NetworkImage(
+              widget.snapshot['profilePic'],
+            ),
             radius: 18,
           ),
           Padding(
@@ -26,25 +39,29 @@ class _CommentCardState extends State<CommentCard> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 RichText(
-                  text: const TextSpan(
+                  text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'userName',
-                        style: TextStyle(
+                        text: widget.snapshot['name'],
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
                       ),
                       TextSpan(
-                        text: ' descreption',
+                        text: "  ${widget.snapshot['text']}",
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
                       ),
                     ],
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 4),
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                    'Date',
-                    style: TextStyle(
+                    timeUntil(DateTime.fromMillisecondsSinceEpoch(widget.snapshot['datePublished'] as int)),
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                     ),
                   ),
