@@ -1,8 +1,10 @@
 import 'dart:typed_data';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/models/post.dart';
 import 'package:flutter_instagram_clone/resources/firebase_storage.dart';
+import 'package:flutter_instagram_clone/utlis/snackbar.dart';
 import 'package:uuid/uuid.dart';
 
 class FireStoreMethods {
@@ -54,6 +56,47 @@ class FireStoreMethods {
       }
     } catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  Future<bool> postComments({
+    required String postID,
+    required String uid,
+    required String name,
+    required String text,
+    required String profilePic,
+    required BuildContext context,
+  }) async {
+    try {
+      String commentID = const Uuid().v1();
+      await _firestore.collection('posts').doc(postID).collection('comments').doc(commentID).set({
+        'profilePic': profilePic,
+        'name': name,
+        'uid': uid,
+        'text': text,
+        'commentId': commentID,
+        'datePublished': DateTime.now(),
+      });
+      if (context.mounted) {
+        showSnackbar(
+          context: context,
+          text: 'Comment posted successfully',
+          contentType: ContentType.success,
+          title: "Commented",
+        );
+      }
+      return true;
+    } catch (e) {
+      if (context.mounted) {
+        showSnackbar(
+          context: context,
+          text: e.toString(),
+          contentType: ContentType.failure,
+          title: "Oh snap!",
+        );
+      }
+      debugPrint(e.toString());
+      return false;
     }
   }
 }

@@ -179,7 +179,9 @@ class _PostCardState extends State<PostCard> {
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {
-                      return const CommenstScreen();
+                      return CommenstScreen(
+                        postID: post.postId,
+                      );
                     },
                   ),
                 ),
@@ -253,7 +255,9 @@ class _PostCardState extends State<PostCard> {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) {
-                        return const CommenstScreen();
+                        return CommenstScreen(
+                          postID: post.postId,
+                        );
                       },
                     ),
                   ),
