@@ -15,3 +15,11 @@ List<Widget> homeScreenWidgets = [
     uid: FirebaseAuth.instance.currentUser!.uid,
   ),
 ];
+List<Widget> homeScreenWidgetsWeb = [
+  const FeedScreen(),
+  const SearchScreen(),
+  const AddPostScreen(),
+  ProfileScreen(
+    uid: FirebaseAuth.instance.currentUser!.uid,
+  ),
+];
