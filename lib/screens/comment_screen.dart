@@ -72,6 +72,16 @@ class _CommenstScreenState extends State<CommenstScreen> {
               ),
             );
           }
+          if (snapshot.data!.docs.isEmpty) {
+            return const Center(
+              child: Text(
+                "No comments yet",
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            );
+          }
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {

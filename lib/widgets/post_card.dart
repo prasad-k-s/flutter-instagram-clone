@@ -29,6 +29,11 @@ class _PostCardState extends State<PostCard> {
 
   bool isLikeAnimating = false;
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Post post = Post.fromMap(widget.snapshot.data());
     UserModel user = Provider.of<UserProvider>(context).getUser!;
@@ -263,13 +268,53 @@ class _PostCardState extends State<PostCard> {
                   ),
                   child: Container(
                     padding: const EdgeInsets.only(top: 6),
-                    child: const Text(
-                      'View all 200 comments',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: secondaryColor,
-                      ),
+                    child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('posts')
+                          .doc(widget.snapshot['postId'])
+                          .collection('comments')
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Text(
+                            'Loading....',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: secondaryColor,
+                            ),
+                          );
+                        }
+                        if (snapshot.hasError) {
+                          return Text(
+                            snapshot.error.toString(),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: secondaryColor,
+                            ),
+                          );
+                        }
+                        return Text(
+                          snapshot.data!.docs.isEmpty
+                              ? 'No comment yet'
+                              : 'View ${snapshot.data!.docs.length} comment${snapshot.data!.docs.length == 1 ? '' : 's'}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: secondaryColor,
+                          ),
+                        );
+                      },
                     ),
+                    // child: Text(
+                    //   commentLen == null
+                    //       ? 'Loading....'
+                    //       : commentLen == 0
+                    //           ? 'No comment yet'
+                    //           : 'View $commentLen comment${commentLen == 1 ? '' : 's'}',
+                    //   style: const TextStyle(
+                    //     fontSize: 16,
+                    //     color: secondaryColor,
+                    //   ),
+                    // ),
                   ),
                 ),
                 Container(
