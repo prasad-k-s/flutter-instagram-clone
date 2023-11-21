@@ -26,10 +26,21 @@ class _SearchScreenState extends State<SearchScreen> {
         backgroundColor: mobileBackgroundColor,
         title: TextFormField(
           controller: searchController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: 'Search for a user',
             border: InputBorder.none,
             filled: true,
+            suffixIcon: isShowUsers
+                ? IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isShowUsers = false;
+                        searchController.clear();
+                      });
+                    },
+                    icon: const Icon(Icons.close),
+                  )
+                : null,
           ),
           onFieldSubmitted: (value) {
             debugPrint(value);
