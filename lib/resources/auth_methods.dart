@@ -65,4 +65,8 @@ class AuthMethods {
       return e.toString();
     }
   }
+
+  Future<void> signOUT() async {
+    await _auth.signOut();
+  }
 }

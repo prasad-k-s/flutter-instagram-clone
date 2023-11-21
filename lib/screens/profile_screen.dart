@@ -2,7 +2,9 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_instagram_clone/resources/auth_methods.dart';
 import 'package:flutter_instagram_clone/resources/firestore_methods.dart';
+import 'package:flutter_instagram_clone/screens/login_screen.dart';
 import 'package:flutter_instagram_clone/utlis/colors.dart';
 import 'package:flutter_instagram_clone/utlis/snackbar.dart';
 import 'package:flutter_instagram_clone/widgets/follow_button.dart';
@@ -121,9 +123,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ? FollowButton(
                                           backgroundColor: mobileBackgroundColor,
                                           borderColor: Colors.grey,
-                                          text: 'Edit Profile',
+                                          text: 'Sign Out',
                                           textColor: primaryColor,
-                                          onPress: () {},
+                                          onPress: () async {
+                                            await AuthMethods().signOUT();
+                                            if (context.mounted) {
+                                              Navigator.of(context).pushReplacement(
+                                                MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return const LoginScreen();
+                                                  },
+                                                ),
+                                              );
+                                            }
+                                          },
                                         )
                                       : isFollowing
                                           ? FollowButton(
