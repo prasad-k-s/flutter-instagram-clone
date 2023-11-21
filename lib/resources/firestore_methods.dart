@@ -79,7 +79,7 @@ class FireStoreMethods {
           'datePublished': DateTime.now().millisecondsSinceEpoch,
         },
       );
-     
+
       return true;
     } catch (e) {
       if (context.mounted) {
@@ -95,10 +95,10 @@ class FireStoreMethods {
     }
   }
 
-  Future<void> deletePost(String postId,BuildContext context) async {
+  Future<void> deletePost(String postId, BuildContext context) async {
     try {
       _firestore.collection('posts').doc(postId).delete();
-       if (context.mounted) {
+      if (context.mounted) {
         showSnackbar(
           context: context,
           text: 'Post deleted successfully',
@@ -108,6 +108,46 @@ class FireStoreMethods {
       }
     } catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  Future<void> followUser({required String uid, required String folllowId, required BuildContext context}) async {
+    try {
+      DocumentSnapshot snapshot = await _firestore.collection('users').doc(uid).get();
+
+      List following = (snapshot.data()! as dynamic)['following'];
+      if (following.contains(folllowId)) {
+        await _firestore.collection('users').doc(folllowId).update(
+          {
+            'followers': FieldValue.arrayRemove([uid]),
+          },
+        );
+        await _firestore.collection('users').doc(folllowId).update(
+          {
+            'following': FieldValue.arrayRemove([folllowId]),
+          },
+        );
+      } else {
+        await _firestore.collection('users').doc(folllowId).update(
+          {
+            'followers': FieldValue.arrayUnion([uid]),
+          },
+        );
+        await _firestore.collection('users').doc(folllowId).update(
+          {
+            'following': FieldValue.arrayUnion([folllowId]),
+          },
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showSnackbar(
+          context: context,
+          text: e.toString(),
+          contentType: ContentType.failure,
+          title: "Oh snap!",
+        );
+      }
     }
   }
 }

@@ -2,6 +2,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_instagram_clone/resources/firestore_methods.dart';
 import 'package:flutter_instagram_clone/utlis/colors.dart';
 import 'package:flutter_instagram_clone/utlis/snackbar.dart';
 import 'package:flutter_instagram_clone/widgets/follow_button.dart';
@@ -130,14 +131,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               borderColor: Colors.grey,
                                               text: 'Unfollow',
                                               textColor: Colors.black,
-                                              onPress: () {},
+                                              onPress: () async {
+                                                await FireStoreMethods().followUser(
+                                                  uid: FirebaseAuth.instance.currentUser!.uid,
+                                                  folllowId: userData['uid'],
+                                                  context: context,
+                                                );
+                                                setState(() {
+                                                  isFollowing = false;
+                                                  followers--;
+                                                });
+                                              },
                                             )
                                           : FollowButton(
                                               backgroundColor: Colors.blue,
                                               borderColor: Colors.blue,
                                               text: 'Follow',
                                               textColor: Colors.white,
-                                              onPress: () {},
+                                              onPress: () async {
+                                                await FireStoreMethods().followUser(
+                                                  uid: FirebaseAuth.instance.currentUser!.uid,
+                                                  folllowId: userData['uid'],
+                                                  context: context,
+                                                );
+                                                setState(() {
+                                                  isFollowing = true;
+                                                  followers++;
+                                                });
+                                              },
                                             ),
                                 ],
                               ),
