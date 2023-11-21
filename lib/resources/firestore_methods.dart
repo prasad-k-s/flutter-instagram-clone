@@ -79,14 +79,7 @@ class FireStoreMethods {
           'datePublished': DateTime.now().millisecondsSinceEpoch,
         },
       );
-      // if (context.mounted) {
-      //   showSnackbar(
-      //     context: context,
-      //     text: 'Comment posted successfully',
-      //     contentType: ContentType.success,
-      //     title: "Commented",
-      //   );
-      // }
+     
       return true;
     } catch (e) {
       if (context.mounted) {
@@ -99,6 +92,22 @@ class FireStoreMethods {
       }
       debugPrint(e.toString());
       return false;
+    }
+  }
+
+  Future<void> deletePost(String postId,BuildContext context) async {
+    try {
+      _firestore.collection('posts').doc(postId).delete();
+       if (context.mounted) {
+        showSnackbar(
+          context: context,
+          text: 'Post deleted successfully',
+          contentType: ContentType.success,
+          title: "Deleted",
+        );
+      }
+    } catch (e) {
+      debugPrint(e.toString());
     }
   }
 }

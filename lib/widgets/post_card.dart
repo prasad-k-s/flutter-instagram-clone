@@ -33,6 +33,10 @@ class _PostCardState extends State<PostCard> {
     super.initState();
   }
 
+  void deletePost() async {
+    await FireStoreMethods().deletePost(widget.snapshot['postId'], context);
+  }
+
   @override
   Widget build(BuildContext context) {
     Post post = Post.fromMap(widget.snapshot.data());
@@ -89,7 +93,10 @@ class _PostCardState extends State<PostCard> {
                             ]
                                 .map(
                                   (e) => InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      deletePost();
+                                      Navigator.of(context).pop();
+                                    },
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
                                         vertical: 12,
