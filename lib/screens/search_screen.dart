@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_instagram_clone/screens/profile_screen.dart';
 import 'package:flutter_instagram_clone/utlis/colors.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -79,6 +80,15 @@ class _SearchScreenState extends State<SearchScreen> {
                         horizontal: 10,
                       ),
                       child: ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ProfileScreen(uid: snapshot.data!.docs[index]['uid']);
+                              },
+                            ),
+                          );
+                        },
                         leading: CircleAvatar(
                           backgroundImage: NetworkImage(snapshot.data!.docs[index]['photoUrl']),
                         ),
