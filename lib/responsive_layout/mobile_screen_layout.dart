@@ -62,11 +62,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               Icons.add_circle,
             ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.favorite,
-            ),
-          ),
+      
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person,

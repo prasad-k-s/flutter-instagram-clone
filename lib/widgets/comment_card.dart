@@ -46,12 +46,14 @@ class _CommentCardState extends State<CommentCard> {
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
+                          color: Colors.white,
                         ),
                       ),
                       TextSpan(
                         text: "  ${widget.snapshot['text']}",
                         style: const TextStyle(
                           fontSize: 16,
+                          color: Colors.white,
                         ),
                       ),
                     ],

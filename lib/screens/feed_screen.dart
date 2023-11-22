@@ -23,13 +23,7 @@ class _FeedScreenState extends State<FeedScreen> {
       appBar: kIsWeb
           ? null
           : AppBar(
-              centerTitle: false,
-              actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.messenger_outline),
-                )
-              ],
+              centerTitle: true,
               backgroundColor: mobileBackgroundColor,
               title: SvgPicture.asset(
                 'assets/ic_instagram.svg',

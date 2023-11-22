@@ -10,7 +10,6 @@ List<Widget> homeScreenWidgets = [
   const FeedScreen(),
   const SearchScreen(),
   const AddPostScreen(),
-  const Text('favorite'),
   ProfileScreen(
     uid: FirebaseAuth.instance.currentUser!.uid,
   ),

@@ -214,10 +214,7 @@ class _PostCardState extends State<PostCard> {
                 ),
               ),
               const Spacer(),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.bookmark),
-              ),
+
               // Expanded(
               //   child: Container(
               //     color: Colors.amber,
