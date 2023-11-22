@@ -112,6 +112,16 @@ class _SearchScreenState extends State<SearchScreen> {
                     snapshot.error.toString(),
                   );
                 }
+                if (snapshot.data!.docs.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'No posts to show',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  );
+                }
                 return MasonryGridView.builder(
                   mainAxisSpacing: 4,
                   crossAxisSpacing: 4,

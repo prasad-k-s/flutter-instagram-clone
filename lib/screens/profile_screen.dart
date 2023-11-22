@@ -3,9 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_instagram_clone/main.dart';
 import 'package:flutter_instagram_clone/resources/auth_methods.dart';
 import 'package:flutter_instagram_clone/resources/firestore_methods.dart';
-import 'package:flutter_instagram_clone/screens/login_screen.dart';
 import 'package:flutter_instagram_clone/utlis/colors.dart';
 import 'package:flutter_instagram_clone/utlis/responsive.dart';
 import 'package:flutter_instagram_clone/utlis/snackbar.dart';
@@ -138,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 Navigator.of(context).pushReplacement(
                                                   MaterialPageRoute(
                                                     builder: (context) {
-                                                      return const LoginScreen();
+                                                      return const MyApp();
                                                     },
                                                   ),
                                                 );
