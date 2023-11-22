@@ -166,6 +166,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
             icon: const Icon(
               Icons.upload,
               size: 60,
+              color: Colors.white,
             ),
           ),
         ),

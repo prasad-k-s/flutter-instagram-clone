@@ -44,28 +44,28 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
             onPressed: () => onTap(0),
             icon: Icon(
               Icons.home,
-              color: _page == 0 ? primaryColor : secondaryColor,
+              color: _page == 0 ? Colors.blue : Colors.white,
             ),
           ),
           IconButton(
             onPressed: () => onTap(1),
             icon: Icon(
               Icons.search,
-              color: _page == 1 ? primaryColor : secondaryColor,
+              color: _page == 1 ? Colors.blue : Colors.white,
             ),
           ),
           IconButton(
             onPressed: () => onTap(2),
             icon: Icon(
               Icons.add_a_photo,
-              color: _page == 2 ? primaryColor : secondaryColor,
+              color: _page == 2 ? Colors.blue : Colors.white,
             ),
           ),
           IconButton(
             onPressed: () => onTap(3),
             icon: Icon(
               Icons.person,
-              color: _page == 3 ? primaryColor : secondaryColor,
+              color: _page == 3 ? Colors.blue : Colors.white,
             ),
           ),
         ],

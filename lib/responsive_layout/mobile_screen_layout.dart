@@ -42,8 +42,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       ),
       bottomNavigationBar: CupertinoTabBar(
         backgroundColor: mobileBackgroundColor,
-        activeColor: primaryColor,
-        inactiveColor: secondaryColor,
+        activeColor: Colors.blue,
+        inactiveColor: Colors.white,
         currentIndex: _page,
         onTap: onTap,
         items: const [
@@ -62,7 +62,6 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               Icons.add_circle,
             ),
           ),
-      
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person,
